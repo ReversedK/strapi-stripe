@@ -15,13 +15,14 @@ module.exports = async ({ strapi }) => {
 };
 
 async function generateJs() {
+  const extensionsPath = strapi.dirs.extensions || strapi.dirs.dist.extensions;  
   const bbbJsPath = path.resolve(extensionsPath, 'strapi-stripe', 'public', 'stripe.js');
   if (!fs.existsSync(bbbJsPath)) {
   const jsData = fs.readFileSync(path.resolve(__dirname, 'public', 'stripe.js'), 'utf8');  
   const filledJsData = _.template(jsData)({
     backendUrl: strapi.config.server.url,
   });
-  const extensionsPath = strapi.dirs.extensions || strapi.dirs.dist.extensions;  
+  
   await fs.ensureFile(bbbJsPath);
   await fs.writeFile(bbbJsPath, filledJsData);
   }
